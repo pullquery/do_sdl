@@ -40,6 +40,38 @@ void App::handleEvent() {
         isRunning = false;
         break;
 
+    case SDL_MOUSEBUTTONUP:
+        std::cout << "Mouse Button Up" << std::endl;
+        break;
+
+    case SDL_MOUSEBUTTONDOWN:
+        std::cout << "Mouse Button Down" << std::endl;
+        break;
+
+    case SDL_MOUSEWHEEL:
+        std::cout << "Mouse Wheel" << std::endl;
+        break;
+
+    case SDL_KEYUP:
+        std::cout
+            << "Key Up: "
+            << SDL_GetScancodeName(event.key.keysym.scancode)
+            << "("
+            << SDL_GetKeyName(event.key.keysym.sym)
+            << ")"
+            << std::endl;
+        break;
+
+    case SDL_KEYDOWN:
+        std::cout
+            << "Key Up: "
+            << SDL_GetScancodeName(event.key.keysym.scancode)
+            << "("
+            << SDL_GetKeyName(event.key.keysym.sym)
+            << ")"
+            << std::endl;
+        break;
+
     default:
         break;
     }
@@ -47,7 +79,7 @@ void App::handleEvent() {
 
 void App::update() {
     count++;
-    std::cout << "Count: " << count << std::endl;
+    // std::cout << "Count: " << count << std::endl;
 }
 
 void App::render() {
