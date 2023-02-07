@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "App.hpp"
 
 App::App() {}
@@ -28,6 +29,9 @@ void App::init(const char* title, int x, int y, int w, int h, bool fullscreen) {
         return;
     }
 
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderClear(renderer);
+
     isRunning = true;
 }
 
@@ -40,36 +44,36 @@ void App::handleEvent() {
         isRunning = false;
         break;
 
-    case SDL_MOUSEBUTTONUP:
-        std::cout << "Mouse Button Up" << std::endl;
-        break;
-
     case SDL_MOUSEBUTTONDOWN:
-        std::cout << "Mouse Button Down" << std::endl;
+        isClicking = true;
         break;
 
-    case SDL_MOUSEWHEEL:
-        std::cout << "Mouse Wheel" << std::endl;
+    case SDL_MOUSEBUTTONUP:
+        isClicking = false;
         break;
 
-    case SDL_KEYUP:
-        std::cout
-            << "Key Up: "
-            << SDL_GetScancodeName(event.key.keysym.scancode)
-            << "("
-            << SDL_GetKeyName(event.key.keysym.sym)
-            << ")"
-            << std::endl;
-        break;
 
     case SDL_KEYDOWN:
-        std::cout
-            << "Key Up: "
-            << SDL_GetScancodeName(event.key.keysym.scancode)
-            << "("
-            << SDL_GetKeyName(event.key.keysym.sym)
-            << ")"
-            << std::endl;
+        switch (event.key.keysym.sym) {
+        case SDLK_1:
+        case SDLK_KP_1:
+            color = 1;
+            break;
+
+        case SDLK_2:
+        case SDLK_KP_2:
+            color = 2;
+            break;
+
+        case SDLK_3:
+        case SDLK_KP_3:
+            color = 3;
+            break;
+
+        default:
+            color = 0;
+            break;
+        }
         break;
 
     default:
@@ -78,22 +82,32 @@ void App::handleEvent() {
 }
 
 void App::update() {
-    count++;
-    // std::cout << "Count: " << count << std::endl;
+    SDL_GetMouseState(&mouseX, &mouseY);
 }
 
 void App::render() {
-    SDL_RenderClear(renderer);
+    if (!isClicking) return;
 
+    switch (color) {
+    case 1:
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+        break;
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderDrawLine(renderer, 100, 300, 700, 300);
-    SDL_RenderDrawLine(renderer, 400, 100, 400, 500);
-    SDL_RenderDrawLine(renderer, 100, 100, 700, 500);
-    SDL_RenderDrawLine(renderer, 100, 500, 700, 100);
+    case 2:
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        break;
 
+    case 3:
+        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+        break;
 
-    SDL_SetRenderDrawColor(renderer, 0xFF, 0xCC, 0x00, 255);
+    default:
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        break;
+    }
+
+    SDL_RenderFillRect(renderer, new SDL_Rect{ mouseX, mouseY, 5, 5 });
+
     SDL_RenderPresent(renderer);
 }
 

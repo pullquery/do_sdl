@@ -5,7 +5,11 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     bool isRunning;
-    int count;
+
+    bool isClicking = false;
+    int mouseX;
+    int mouseY;
+    int color;
 
 public:
     App();
